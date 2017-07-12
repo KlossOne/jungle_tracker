@@ -2,7 +2,8 @@ URL ={
     'base' : 'https://{region}.api.riotgames.com/{url}',
     'getSummonerByNameV3' : '/lol/summoner/v3/summoners/by-name/{name}',
     'getFeaturedGames' : '/lol/spectator/v3/featured-games',
-    'getCurrentGame' : '/lol/spectator/v3/active-games/by-summoner/{summonerId}'
+    'getCurrentGame' : '/lol/spectator/v3/active-games/by-summoner/{summonerId}',
+    'getMatchList' : '/lol/match/v3/matchlists/by-account/{accountId}'
 }
 API_VERSIONS = {
     'summoner' : '3'

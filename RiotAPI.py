@@ -11,15 +11,16 @@ class RiotAPI(object):
         self.region = region
 
     #   La methode request ne fait que request n'a donc aucune gestion d'erreur ou de controle de retour
-    def _request(self, api_url, params=()):
+    def _request(self, api_url, params={}):
         time.sleep(.05)
         args = {'api_key': self.api_key}
         #       Fait le tour de tout les parametres donne
-        for key, value in params:
+        print params
+        for key in params:
             #           Si une clef existe deja ( par erreur pourr exemple )  on ne l'ajoute pas sinon probleme
             #           Faire une trace ???
             if key not in args:
-                args[key] = value
+                args[key] = params[key]
         response = requests.get(
             #               Le format permet d'ajouter les 'variables' dans le string
             Const.URL['base'].format(
@@ -30,6 +31,7 @@ class RiotAPI(object):
             params=args
         )
         print response.url
+        #print response.headers
         if(self.is_error(response.json())):
             raise Exception("Faire reference a l'url et le code")
         return response.json()
@@ -94,4 +96,18 @@ class RiotAPI(object):
             print "message : "+str(result['status']['message'])
             return 1
         else:
+            return 0
+    def get_matchlist_by_account(self, account_id,champion_id=-1,begin_index=-1,end_index=-1):
+        params={}
+        if(champion_id > -1):
+            params.update({'champion' : champion_id})
+        #if(begin_index > -1 and end_index > -1):
+        #    params.update({'beginIndex' : begin_index,'endIndex' : end_index})
+            params.update({'beginIndex' : 0,'endIndex' : 20})
+            api_url = Const.URL['getMatchList'].format(
+                accountId=account_id
+            )
+            return self._request(api_url, params)
+        else:
+            print "Aucun champion donner"
             return 0

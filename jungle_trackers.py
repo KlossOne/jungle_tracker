@@ -9,11 +9,12 @@ def main():
 
     #get_jungler_featured_game()
         #Permet presque a coup sur de trouver une game en normal
-    result = api.get_jungler_featured_game()
+    match_info_jungler = api.get_jungler_featured_game()
+    print match_info_jungler
+    jungler=api.get_summoner_by_name(match_info_jungler['summonerName'])
+    print jungler
+    result=api.get_matchlist_by_account(jungler['accountId'],match_info_jungler['championId'])
     print result
-
-
-
 if  __name__ == "__main__":
     req_version = (2, 7)
     cur_version = sys.version_info
