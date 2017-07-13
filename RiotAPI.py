@@ -1,7 +1,7 @@
-import requests
-
-import Const
+# -*- coding: utf-8 -*-
 import time
+import requests
+import Const
 
 
 class RiotAPI(object):
@@ -32,7 +32,7 @@ class RiotAPI(object):
         )
         print response.url
         #print response.headers
-        if(self.is_error(response.json())):
+        if self.is_error(response.json()):
             raise Exception("Faire reference a l'url et le code")
         return response.json()
 
@@ -45,7 +45,7 @@ class RiotAPI(object):
         return self._request(api_url)
 
     def get_jungler_featured_game(self):
-        matchs=self.get_featured_games()
+        matchs = self.get_featured_games()
         # Faire un rand pour choisir la game ?
         #matchs['gameList']
         for match in matchs['gameList']:
@@ -77,33 +77,34 @@ class RiotAPI(object):
         result = self.get_current_game(summoner)
         return result
 
-    def get_jungler_by_match(self,match,team_id=100):
+    def get_jungler_by_match(self, match, team_id=100):
         jungler_ennemi = {}
         for summoner_in_game in match['participants']:
             #print str(summoner_in_game['teamId'])+"<- team ID "+ " spell 2->" +str(summoner_in_game['spell2Id'])+ " spell 1->"+str(summoner_in_game['spell1Id'])
-            if (summoner_in_game['teamId'] == team_id and (summoner_in_game['spell2Id'] == Const.SUMMONER_SPELL['Smite'] or summoner_in_game['spell1Id'] == Const.SUMMONER_SPELL['Smite'])):
+            if summoner_in_game['teamId'] == team_id and (summoner_in_game['spell2Id'] == Const.SUMMONER_SPELL['Smite'] or summoner_in_game['spell1Id'] == Const.SUMMONER_SPELL['Smite']):
                 jungler_ennemi = summoner_in_game
         return jungler_ennemi
+
     def get_my_jungle_ennemi(self):
         result = self.get_my_current_game()
         for summoner_in_game in result['participants']:
             if summoner_in_game['summonerName'] != self.name:
                 return self.get_jungler_by_match(result, summoner_in_game['teamId'])
 
-    def is_error(self,result):
+    def is_error(self, result):
         if 'status' in result:
             print "status_code : "+str(result['status']['status_code'])
             print "message : "+str(result['status']['message'])
             return 1
         else:
             return 0
-    def get_matchlist_by_account(self, account_id,champion_id=-1,begin_index=-1,end_index=-1):
-        params={}
+    def get_matchlist_by_account(self, account_id, champion_id=-1, begin_index=-1, end_index=-1):
+        params = {}
         if(champion_id > -1):
             params.update({'champion' : champion_id})
         #if(begin_index > -1 and end_index > -1):
         #    params.update({'beginIndex' : begin_index,'endIndex' : end_index})
-            params.update({'beginIndex' : 0,'endIndex' : 20})
+            params.update({'beginIndex' : 0, 'endIndex' : 20})
             api_url = Const.URL['getMatchList'].format(
                 accountId=account_id
             )
