@@ -15,7 +15,6 @@ class RiotAPI(object):
         time.sleep(.05)
         args = {'api_key': self.api_key}
         #       Fait le tour de tout les parametres donne
-        print params
         for key in params:
             #           Si une clef existe deja ( par erreur pourr exemple )  on ne l'ajoute pas sinon probleme
             #           Faire une trace ???
@@ -35,6 +34,13 @@ class RiotAPI(object):
         if self.is_error(response.json()):
             raise Exception("Faire reference a l'url et le code")
         return response.json()
+    def set_summoner_name(self, summoner_name):
+        self.name = summoner_name
+        return 1
+
+    def set_summoner_name(self):
+        return self.name
+
 
 #######################################################################################################################
 # Pour faciliter le debugage de la collecte de donnees
